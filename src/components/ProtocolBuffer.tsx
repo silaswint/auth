@@ -28,6 +28,20 @@ interface TabularData {
   secret: string[]
   type: string[]
 }
+
+const getSubstringAfter = (url: string, delimiter: string): string | null => {
+  // Finding the index of the delimiter
+  const index = url.indexOf(delimiter)
+
+  // Check whether the delimiter has been found
+  if (index === -1) {
+    return null // or a suitable error message
+  }
+
+  // Extracting the part after the delimiter
+  return url.substring(index + delimiter.length)
+}
+
 const ProtocolBuffer = ({ qrCodeData }: props): ReactElement => {
   const tabularData: TabularData = {
     algorithm: [],
@@ -39,7 +53,10 @@ const ProtocolBuffer = ({ qrCodeData }: props): ReactElement => {
     type: []
   }
 
-  const dataQuery = new URL(qrCodeData).searchParams.get('data')
+  // problem: if URL is something like otpauth-migration://offline?data=a+b it will interpret the '+' as a space
+  // const dataQuery = new URL(qrCodeData).searchParams.get('data')
+
+  const dataQuery = getSubstringAfter(qrCodeData, 'data=')
 
   if (!dataQuery) {
     return <p>No data found</p>
