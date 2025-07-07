@@ -68,6 +68,7 @@ export default {
         },
         hot: true,
         port: 3000,
+        allowedHosts: "all"
     },
     devtool: "source-map",
 };
